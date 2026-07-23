@@ -1,0 +1,1 @@
+我希望在codex 命令行中， status line 能显示， 用户每次命令之后， agent 命令 token和钱的花销。 可能已经有类似的方法， 也可能可以简单配置？ 也可能是需要一些hook？ 你来看看？ 如果需要查找 github等，你可以用 subagent来做， 使用 gpt-5.6-luna xhigh 模型。 
