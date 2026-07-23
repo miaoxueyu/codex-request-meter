@@ -22,10 +22,10 @@ uv tool install .
 codex-request-meter-install
 ```
 
-For a remote GitHub repository, replace `.` with its Git URL:
+For this private GitHub repository:
 
 ```bash
-uv tool install git+https://github.com/<owner>/codex-request-meter
+uv tool install git+https://github.com/BobDLA/codex-request-meter
 codex-request-meter-install
 ```
 
