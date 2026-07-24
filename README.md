@@ -87,3 +87,11 @@ The meter includes Codex `thread_spawn` subagents, including nested agents.
 Internal system work such as guardian agents does not expose the lifecycle
 hooks needed to attribute its tokens to a user prompt, so those costs remain
 outside the prompt total.
+
+## Acknowledgments
+
+- [Linux DO](https://linux.do/) — Learn AI, go LinuxDO!
+
+## License
+
+MIT
