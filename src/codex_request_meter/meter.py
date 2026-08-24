@@ -344,6 +344,22 @@ def _format_cost(value: float | None, currency: str) -> str:
     return f"{currency} {value:.4f}" if value is not None else f"{currency} n/a"
 
 
+def _abbrev_tokens(value: int) -> str:
+    value = max(0, int(value))
+    if value >= 1_000_000:
+        return f"{value / 1_000_000:.1f}M".replace('.0M', 'M')
+    if value >= 1_000:
+        return f"{value / 1_000:.1f}k".replace('.0k', 'k')
+    return f"{value}"
+
+
+def _compact_cost(value: float | None, currency: str) -> str:
+    if value is None:
+        return "n/a"
+    symbol = {"CNY": "¥", "USD": "$"}.get(currency, currency)
+    return f"{symbol}{value:.3f}"
+
+
 def _summary_message(
     aggregate: dict[str, int],
     cost: float | None,
@@ -358,19 +374,11 @@ def _summary_message(
     session_total_input = max(0, int(session_usage.get('input_tokens', 0) or 0))
     session_cached_input = max(0, int(session_usage.get('cached_input_tokens', 0) or 0))
     session_hit_rate = (session_cached_input / session_total_input * 100.0) if session_total_input else 0.0
-    prompt_tokens = _format_tokens(aggregate['total_tokens'])
-    session_tokens = _format_tokens(session_usage['total_tokens'])
-    tok_width = max(len(prompt_tokens), len(session_tokens))
-    prompt_cost_str = _format_cost(cost, currency)
-    session_cost_str = _format_cost(session_cost, currency)
-    cost_width = max(len(prompt_cost_str), len(session_cost_str))
     return (
-        f"Prompt:  {prompt_tokens.rjust(tok_width)} tok  "
-        f"{prompt_cost_str.rjust(cost_width)}  "
-        f"cache {hit_rate:.1f}%"
-        f"\nSession: {session_tokens.rjust(tok_width)} tok  "
-        f"{session_cost_str.rjust(cost_width)}  "
-        f"cache {session_hit_rate:.1f}%"
+        f"P {_abbrev_tokens(aggregate['total_tokens'])} tok "
+        f"{_compact_cost(cost, currency)} c{hit_rate:.1f}% "
+        f"S {_abbrev_tokens(session_usage['total_tokens'])} tok "
+        f"{_compact_cost(session_cost, currency)} c{session_hit_rate:.1f}%"
     )
 
 
