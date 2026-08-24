@@ -47,7 +47,8 @@ PY
     echo
     echo "Done. Next:"
     echo "  1) Start a NEW Codex session and approve the hook trust prompt if shown."
-    echo "  2) Each turn will show one compact line:"
-    echo "       P <n>k tok ¥<cost> c<pct>%  S <n>M ¥<cost> c<pct>%"
-    echo "       (P=task, S=session, k/M=thousand/million, ¥=CNY, c=cache hit rate)"
+    echo "  2) Each turn will show two aligned lines (first padded with '-' if shorter):"
+    echo "       Prompt:  <n>k tok  ¥<cost>  cache <pct>%"
+    echo "       Session: <n>M tok  ¥<cost>  cache <pct>%"
+    echo "       (k/M=thousand/million, ¥=CNY; best viewed in terminal TUI)"
     echo "  Prices are in $CFG/pricing.{peak,offpeak}.json (CNY per 1M tokens)."

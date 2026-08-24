@@ -374,12 +374,17 @@ def _summary_message(
     session_total_input = max(0, int(session_usage.get('input_tokens', 0) or 0))
     session_cached_input = max(0, int(session_usage.get('cached_input_tokens', 0) or 0))
     session_hit_rate = (session_cached_input / session_total_input * 100.0) if session_total_input else 0.0
-    return (
-        f"P {_abbrev_tokens(aggregate['total_tokens'])} tok "
-        f"{_compact_cost(cost, currency)} c{hit_rate:.1f}% "
-        f"S {_abbrev_tokens(session_usage['total_tokens'])} "
-        f"{_compact_cost(session_cost, currency)} c{session_hit_rate:.1f}%"
+    prompt_line = (
+        f"Prompt:  {_abbrev_tokens(aggregate['total_tokens'])} tok  "
+        f"{_compact_cost(cost, currency)}  cache {hit_rate:.1f}%"
     )
+    session_line = (
+        f"Session: {_abbrev_tokens(session_usage['total_tokens'])} tok  "
+        f"{_compact_cost(session_cost, currency)}  cache {session_hit_rate:.1f}%"
+    )
+    width = max(len(prompt_line), len(session_line))
+    prompt_line = prompt_line.ljust(width, '-')
+    return f"{prompt_line}\n{session_line}"
 
 
 def _base_record(payload: dict[str, Any], kind: str) -> dict[str, Any]:
