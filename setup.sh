@@ -44,8 +44,10 @@ for event, groups in d.get('hooks', {}).items():
 open(hp, 'w', encoding='utf-8').write(json.dumps(d, ensure_ascii=False, indent=2) + '\n')
 PY
 
-echo
-echo "Done. Next:"
-echo "  1) Start a NEW Codex session and approve the hook trust prompt if shown."
-echo "  2) Each turn will show: Prompt <n> tok / CNY <c> [in ... | cache <pct>% | out ... | agents n] Session ... [cache <pct>%]"
-echo "  Prices are in $CFG/pricing.{peak,offpeak}.json (CNY per 1M tokens)."
+    echo
+    echo "Done. Next:"
+    echo "  1) Start a NEW Codex session and approve the hook trust prompt if shown."
+    echo "  2) Each turn will show two aligned lines:"
+    echo "       Prompt:  <n> tok / CNY <c>   in ... | cache <pct>% | out ... | agents n"
+    echo "       Session: <n> tok / CNY <c>   cache <pct>%"
+    echo "  Prices are in $CFG/pricing.{peak,offpeak}.json (CNY per 1M tokens)."

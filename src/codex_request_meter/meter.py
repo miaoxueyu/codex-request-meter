@@ -358,16 +358,22 @@ def _summary_message(
     session_total_input = max(0, int(session_usage.get('input_tokens', 0) or 0))
     session_cached_input = max(0, int(session_usage.get('cached_input_tokens', 0) or 0))
     session_hit_rate = (session_cached_input / session_total_input * 100.0) if session_total_input else 0.0
+    prompt_tokens = _format_tokens(aggregate['total_tokens'])
+    session_tokens = _format_tokens(session_usage['total_tokens'])
+    tok_width = max(len(prompt_tokens), len(session_tokens))
+    prompt_cost_str = _format_cost(cost, currency)
+    session_cost_str = _format_cost(session_cost, currency)
+    cost_width = max(len(prompt_cost_str), len(session_cost_str))
     return (
-        f"Prompt {_format_tokens(aggregate['total_tokens'])} tok / "
-        f"{_format_cost(cost, currency)}  ["
+        f"Prompt:  {prompt_tokens.rjust(tok_width)} tok / "
+        f"{prompt_cost_str.rjust(cost_width)}   "
         f"in {_format_tokens(aggregate['input_tokens'])} | "
         f"cache {hit_rate:.1f}% | "
         f"out {_format_tokens(aggregate['output_tokens'])} | "
-        f"agents {subagent_count}]  "
-        f"Session {_format_tokens(session_usage['total_tokens'])} tok / "
-        f"{_format_cost(session_cost, currency)}  "
-        f"[cache {session_hit_rate:.1f}%]"
+        f"agents {subagent_count}\n"
+        f"Session: {session_tokens.rjust(tok_width)} tok / "
+        f"{session_cost_str.rjust(cost_width)}   "
+        f"cache {session_hit_rate:.1f}%"
     )
 
 
