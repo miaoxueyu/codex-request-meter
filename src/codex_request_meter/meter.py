@@ -352,15 +352,22 @@ def _summary_message(
     currency: str,
     subagent_count: int,
 ) -> str:
+    total_input = max(0, int(aggregate.get('input_tokens', 0) or 0))
+    cached_input = max(0, int(aggregate.get('cached_input_tokens', 0) or 0))
+    hit_rate = (cached_input / total_input * 100.0) if total_input else 0.0
+    session_total_input = max(0, int(session_usage.get('input_tokens', 0) or 0))
+    session_cached_input = max(0, int(session_usage.get('cached_input_tokens', 0) or 0))
+    session_hit_rate = (session_cached_input / session_total_input * 100.0) if session_total_input else 0.0
     return (
         f"Prompt {_format_tokens(aggregate['total_tokens'])} tok / "
         f"{_format_cost(cost, currency)}  ["
         f"in {_format_tokens(aggregate['input_tokens'])} | "
-        f"cache {_format_tokens(aggregate['cached_input_tokens'])} | "
+        f"cache {hit_rate:.1f}% | "
         f"out {_format_tokens(aggregate['output_tokens'])} | "
         f"agents {subagent_count}]  "
         f"Session {_format_tokens(session_usage['total_tokens'])} tok / "
-        f"{_format_cost(session_cost, currency)}"
+        f"{_format_cost(session_cost, currency)}  "
+        f"[cache {session_hit_rate:.1f}%]"
     )
 
 

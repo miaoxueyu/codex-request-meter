@@ -1,0 +1,23 @@
+{
+  "currency": "CNY",
+  "models": {
+    "deepseek-v4-flash-vision-exp": {
+      "input_per_million": 1.5,
+      "cached_input_per_million": 0.05,
+      "cache_write_input_per_million": 1.5,
+      "output_per_million": 4.5
+    },
+    "deepseek-v4-pro": {
+      "input_per_million": 4.5,
+      "cached_input_per_million": 0.15,
+      "cache_write_input_per_million": 4.5,
+      "output_per_million": 13.5
+    },
+    "deepseek-v4-pro*": {
+      "input_per_million": 4.5,
+      "cached_input_per_million": 0.15,
+      "cache_write_input_per_million": 4.5,
+      "output_per_million": 13.5
+    }
+  }
+}

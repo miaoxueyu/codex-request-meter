@@ -95,3 +95,36 @@ outside the prompt total.
 ## License
 
 MIT
+
+
+---
+
+## 本 Fork 的定制（DeepSeek + 缓存命中率）
+
+在 upstream 基础上做了两处改动：
+
+- **显示层**：`meter.py` 的 `_summary_message` 把原本的 `cache <token数>` 改成 `cache <命中率>%`（单轮），并在 `Session ...` 后面追加 `[cache <会话命中率>%]`，让你同时看到单轮与整段会话的缓存命中率。
+- **价格/部署**：内置 DeepSeek 价格（元/百万 token），`config/run-meter.sh` 按北京时间自动在**高峰/空闲**两档间切换（高峰 = 周一至周五 9:00-12:00、14:00-18:00，空闲价为高峰一半）。
+
+### 新机器一键安装
+
+```bash
+git clone git@github.com:<你的账号>/codex-request-meter.git
+cd codex-request-meter
+./setup.sh        # 建 venv + 可编辑安装 + 拷贝配置 + 挂 hook
+```
+
+然后 **新开一个 Codex 会话**，若弹出信任 hook 提示选允许。每轮结束后会显示：
+
+```
+Prompt 12,345 tok / CNY 0.02  [in 10,000 | cache 96.4% | out 2,345 | agents 0]  Session 98,765 tok / CNY 0.10  [cache 90.5%]
+```
+
+### 配置位置
+
+- 价格：`~/.config/codex-request-meter/pricing.peak.json`、`pricing.offpeak.json`（单位：元/百万 token；`cache_write_input_per_million` 沿用未命中价，因为 DeepSeek 无单独缓存写入价）。
+- 模型 key：`deepseek-v4-flash-vision-exp`、`deepseek-v4-pro`（另含通配 `deepseek-v4-pro*`，兼容带版本后缀的字符串）。
+- Hook：`~/.codex/hooks.json`；明细：`~/.codex/request-meter/events.jsonl`。
+- 若改了 `~/config` 里的价格，**无需重装或重启**，下一轮即读取新值。
+
+```
