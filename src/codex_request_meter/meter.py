@@ -374,19 +374,11 @@ def _summary_message(
     session_total_input = max(0, int(session_usage.get('input_tokens', 0) or 0))
     session_cached_input = max(0, int(session_usage.get('cached_input_tokens', 0) or 0))
     session_hit_rate = (session_cached_input / session_total_input * 100.0) if session_total_input else 0.0
-    prompt_tok = _abbrev_tokens(aggregate['total_tokens'])
-    session_tok = _abbrev_tokens(session_usage['total_tokens'])
-    tok_width = max(len(prompt_tok), len(session_tok))
-    prompt_cost_str = _compact_cost(cost, currency)
-    session_cost_str = _compact_cost(session_cost, currency)
-    cost_width = max(len(prompt_cost_str), len(session_cost_str))
     return (
-        f"```text\n"
-        f"Prompt:  {prompt_tok.rjust(tok_width)} tok  "
-        f"{prompt_cost_str.rjust(cost_width)}  cache {hit_rate:.1f}%\n"
-        f"Session: {session_tok.rjust(tok_width)} tok  "
-        f"{session_cost_str.rjust(cost_width)}  cache {session_hit_rate:.1f}%\n"
-        f"```"
+        f"P {_abbrev_tokens(aggregate['total_tokens'])} tok "
+        f"{_compact_cost(cost, currency)} c{hit_rate:.1f}% "
+        f"S {_abbrev_tokens(session_usage['total_tokens'])} "
+        f"{_compact_cost(session_cost, currency)} c{session_hit_rate:.1f}%"
     )
 
 
