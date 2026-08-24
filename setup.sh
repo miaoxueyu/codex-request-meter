@@ -47,8 +47,9 @@ PY
     echo
     echo "Done. Next:"
     echo "  1) Start a NEW Codex session and approve the hook trust prompt if shown."
-    echo "  2) Each turn will show two aligned lines (first padded with '-' if shorter):"
-    echo "       Prompt:  <n>k tok  ¥<cost>  cache <pct>%"
+    echo "  2) Each turn shows task + session (aligned):"
+    echo "       Prompt:  <n>k tok  ¥<cost>  cache <pct>%-"
     echo "       Session: <n>M tok  ¥<cost>  cache <pct>%"
-    echo "       (k/M=thousand/million, ¥=CNY; best viewed in terminal TUI)"
+    echo "     - Desktop auto-fills line 1 with '-' to the panel width; tune via CODEX_METER_LINE_W"
+    echo "     - Terminal TUI shows true two-line alignment (k/M=thousand/million, ¥=CNY)"
     echo "  Prices are in $CFG/pricing.{peak,offpeak}.json (CNY per 1M tokens)."

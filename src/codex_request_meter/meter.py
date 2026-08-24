@@ -360,6 +360,12 @@ def _compact_cost(value: float | None, currency: str) -> str:
     return f"{symbol}{value:.3f}"
 
 
+def is_desktop_app() -> bool:
+    """Return True when running under the Codex Desktop app."""
+    origin = str(os.environ.get("CODEX_INTERNAL_ORIGINATOR_OVERRIDE", ""))
+    return origin.lower().startswith("codex desktop")
+
+
 def _summary_message(
     aggregate: dict[str, int],
     cost: float | None,
@@ -382,8 +388,15 @@ def _summary_message(
         f"Session: {_abbrev_tokens(session_usage['total_tokens'])} tok  "
         f"{_compact_cost(session_cost, currency)}  cache {session_hit_rate:.1f}%"
     )
-    width = max(len(prompt_line), len(session_line))
-    prompt_line = prompt_line.ljust(width, '-')
+    if is_desktop_app():
+        # The desktop hooks panel collapses newlines and wraps at a fixed width,
+        # so pad the first line to the wrap width with '-' to push the session
+        # info onto the next visual line. Width is tunable via CODEX_METER_LINE_W.
+        wrap_width = int(os.environ.get("CODEX_METER_LINE_W", "52"))
+        prompt_line = prompt_line.ljust(wrap_width, '-')
+    else:
+        width = max(len(prompt_line), len(session_line))
+        prompt_line = prompt_line.ljust(width, '-')
     return f"{prompt_line}\n{session_line}"
 
 
