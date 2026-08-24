@@ -141,4 +141,31 @@ Session: 98.8k tok  ¥0.10  cache 90.5%
 - Hook：`~/.codex/hooks.json`；明细：`~/.codex/request-meter/events.jsonl`。
 - 若改了 `~/config` 里的价格，**无需重装或重启**，下一轮即读取新值。
 
+### 配合 `codex-spend` 看板（可选）
+
+`codex-spend` 是另一个社区工具：读本地 `~/.codex` 的会话/state 数据，在浏览器里展示
+每日 token、缓存命中率、按模型/项目拆分等。它适合**总览**，与本 hook 的**逐轮**互补。
+
+要求：Node.js ≥ 18，以及 `sqlite3` CLI（macOS：`brew install sqlite`）。
+
+```bash
+# 一键跑（自动下载，可随时用）
+npx codex-spend                 # 打开 http://localhost:4321
+npx codex-spend --no-open       # 不自动开浏览器
+npx codex-spend --port 4399     # 换个端口
+
+# 或全局安装后再跑
+npm install -g codex-spend
+codex-spend
 ```
+
+说明：
+
+- 自动读取最新的 `~/.codex/state_*.sqlite`；**纯本地**，不上传、不读 API key。
+- 常见参数：`--state-db <path>` 指定数据库；`--plan` 按订阅套餐折算「API 等效价值」；
+  `--port` / `--no-open` 控制端口与是否打开浏览器。
+- **DeepSeek 费用会显示 `N/A` / `$0.00`**：它内置的是 OpenAI 模型价格表（`src/parser.js`
+  的 `MODEL_PRICING` + `getPricing()`），没有配置文件，且界面固定显示 `$`。因此
+  **token 数、缓存命中率、每日/按模型图表是准的，只有费用不准**。若要让其计算 DeepSeek
+  费用，需 fork 该仓库并在 `MODEL_PRICING`/`getPricing()` 里加上 DeepSeek 价，再处理
+  CNY/显示货币，工作量较大且要另建仓库。
