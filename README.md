@@ -130,6 +130,10 @@ Prompt:  12.3k tok  ¥0.02  cache 96.4%----------------
 Session: 98.8k tok  ¥0.10  cache 90.5%
 ```
 
+### 实际效果（桌面「钩子」面板）
+
+![桌面「钩子」面板中的记账输出](docs/output-example.png)
+
 ### 配置位置
 
 - 价格：`~/.config/codex-request-meter/pricing.peak.json`、`pricing.offpeak.json`（单位：元/百万 token；`cache_write_input_per_million` 沿用未命中价，因为 DeepSeek 无单独缓存写入价）。
