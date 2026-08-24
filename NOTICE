@@ -1,0 +1,15 @@
+codex-request-meter (customized fork)
+====================================
+
+This project is a customized fork of "codex-request-meter" by BobDLA.
+
+  Original project: https://github.com/BobDLA/codex-request-meter
+  Original license: MIT License
+  Original copyright: (c) BobDLA
+
+Modifications in this fork (per-turn + session cache hit rate display,
+DeepSeek pricing in CNY with automatic peak/off-peak selection via
+run-meter.sh, and the `setup.sh` installer): Copyright (c) 2026 miaoxueyu.
+
+The above is provided in accordance with the MIT License terms; the full
+MIT license text is in the LICENSE file.

@@ -1,5 +1,7 @@
 # Codex Request Meter
 
+> Based on [codex-request-meter](https://github.com/BobDLA/codex-request-meter) by BobDLA (MIT License). See [NOTICE](NOTICE) for attribution.
+
 This repository contains a Codex hook that reports usage for one user prompt,
 including thread-spawned subagents. The completed result is rendered inside the
 Codex TUI as a hook log, for example:
