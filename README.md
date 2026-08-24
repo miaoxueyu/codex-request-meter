@@ -119,8 +119,8 @@ cd codex-request-meter
 然后 **新开一个 Codex 会话**，若弹出信任 hook 提示选允许。每轮结束后会显示：
 
 ```
-Prompt:  12,345 tok / CNY 0.02   in 10,000 | cache 96.4% | out 2,345 | agents 0
-Session: 98,765 tok / CNY 0.10   cache 90.5%
+Prompt:  12,345 tok  CNY 0.02  cache 96.4%
+Session: 98,765 tok  CNY 0.10  cache 90.5%
 ```
 
 ### 配置位置

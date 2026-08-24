@@ -48,6 +48,6 @@ PY
     echo "Done. Next:"
     echo "  1) Start a NEW Codex session and approve the hook trust prompt if shown."
     echo "  2) Each turn will show two aligned lines:"
-    echo "       Prompt:  <n> tok / CNY <c>   in ... | cache <pct>% | out ... | agents n"
-    echo "       Session: <n> tok / CNY <c>   cache <pct>%"
+    echo "       Prompt:  <n> tok  CNY <c>  cache <pct>%"
+    echo "       Session: <n> tok  CNY <c>  cache <pct>%"
     echo "  Prices are in $CFG/pricing.{peak,offpeak}.json (CNY per 1M tokens)."

@@ -365,14 +365,11 @@ def _summary_message(
     session_cost_str = _format_cost(session_cost, currency)
     cost_width = max(len(prompt_cost_str), len(session_cost_str))
     return (
-        f"Prompt:  {prompt_tokens.rjust(tok_width)} tok / "
-        f"{prompt_cost_str.rjust(cost_width)}   "
-        f"in {_format_tokens(aggregate['input_tokens'])} | "
-        f"cache {hit_rate:.1f}% | "
-        f"out {_format_tokens(aggregate['output_tokens'])} | "
-        f"agents {subagent_count}\n"
-        f"Session: {session_tokens.rjust(tok_width)} tok / "
-        f"{session_cost_str.rjust(cost_width)}   "
+        f"Prompt:  {prompt_tokens.rjust(tok_width)} tok  "
+        f"{prompt_cost_str.rjust(cost_width)}  "
+        f"cache {hit_rate:.1f}%"
+        f"\nSession: {session_tokens.rjust(tok_width)} tok  "
+        f"{session_cost_str.rjust(cost_width)}  "
         f"cache {session_hit_rate:.1f}%"
     )
 
