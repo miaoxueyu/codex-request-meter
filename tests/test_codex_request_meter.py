@@ -67,7 +67,13 @@ class MeterTests(unittest.TestCase):
                             "cached_input_per_million": 0.5,
                             "cache_write_input_per_million": 0,
                             "output_per_million": 2,
-                        }
+                        },
+                        "test-family*": {
+                            "input_per_million": 2,
+                            "cached_input_per_million": 1,
+                            "cache_write_input_per_million": 0,
+                            "output_per_million": 4,
+                        },
                     },
                 }
             ),
@@ -97,6 +103,21 @@ class MeterTests(unittest.TestCase):
         self.assertEqual(pricing.estimate("gpt-5.6-sol", usage_value), 35)
         self.assertEqual(pricing.estimate("gpt-5.6-terra", usage_value), 17.5)
         self.assertEqual(pricing.estimate("gpt-5.6-luna", usage_value), 7)
+
+    def test_provider_prefixed_model_reuses_base_pricing(self):
+        usage_value = usage(100, 20, 10)
+        self.assertEqual(
+            self.pricing.rates_for("provider/test-model"),
+            self.pricing.models["test-model"],
+        )
+        self.assertEqual(
+            self.pricing.estimate("provider/test-model", usage_value),
+            self.pricing.estimate("test-model", usage_value),
+        )
+        self.assertEqual(
+            self.pricing.rates_for("provider/test-family-v2"),
+            self.pricing.models["test-family*"],
+        )
 
     def test_package_bundles_pricing_and_generates_portable_hook(self):
         target = self.root / "config" / "pricing.json"

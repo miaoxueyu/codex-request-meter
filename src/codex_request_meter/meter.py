@@ -230,11 +230,20 @@ class PriceTable:
         return cls(str(currency), normalized)
 
     def rates_for(self, model: str) -> dict[str, float] | None:
-        if model in self.models:
-            return self.models[model]
-        for pattern, rates in self.models.items():
-            if pattern.endswith("*") and model.startswith(pattern[:-1]):
-                return rates
+        # Codex may report provider-qualified model names such as
+        # "deepseek/deepseek-flash", while pricing tables usually key the
+        # underlying model name. Try exact matches across both forms first so
+        # a specific entry always wins, then fall back to prefix wildcards.
+        candidates = [model]
+        if "/" in model:
+            candidates.append(model.rsplit("/", 1)[1])
+        for candidate in candidates:
+            if candidate in self.models:
+                return self.models[candidate]
+        for candidate in candidates:
+            for pattern, rates in self.models.items():
+                if pattern.endswith("*") and candidate.startswith(pattern[:-1]):
+                    return rates
         return None
 
     def estimate(self, model: str, usage: dict[str, int]) -> float | None:

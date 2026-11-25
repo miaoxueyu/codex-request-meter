@@ -138,6 +138,7 @@ Session: 98.8k tok  ¥0.10  cache 90.5%
 
 - 价格：`~/.config/codex-request-meter/pricing.peak.json`、`pricing.offpeak.json`（单位：元/百万 token；`cache_write_input_per_million` 沿用未命中价，因为 DeepSeek 无单独缓存写入价）。
 - 模型 key：flash 档位用通配 `deepseek-flash*`、`deepseek-v4-flash*`、`deepseek-v4.1-flash*`（覆盖 `deepseek-v4-flash-vision-exp`、`deepseek-v4.1-flash-expires-on-0910` 等新旧命名）；pro 档位 `deepseek-v4-pro` + 通配 `deepseek-v4-pro*`。
+- 模型标识兼容供应商前缀：`deepseek/deepseek-flash` 会先按全名匹配，未命中时自动回退为 `deepseek-flash` 再查价格。
 - 计价基准（元/百万 token，2026-09 官方价）：flash 空闲 输入 1 / 缓存命中 0.02 / 输出 4，高峰 输入 2 / 缓存命中 0.04 / 输出 8；pro 空闲 输入 4.5 / 缓存命中 0.15 / 输出 13.5，高峰 输入 9 / 缓存命中 0.3 / 输出 27。
 - Hook：`~/.codex/hooks.json`；明细：`~/.codex/request-meter/events.jsonl`。
 - 若改了 `~/config` 里的价格，**无需重装或重启**，下一轮即读取新值。
