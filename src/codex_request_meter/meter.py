@@ -17,6 +17,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+from .pricing_period import pricing_path_for
+
 try:
     import fcntl
 except ImportError:  # pragma: no cover - Windows fallback
@@ -543,7 +545,13 @@ def _handle_stop(payload: dict[str, Any], ledger: Ledger, pricing: PriceTable) -
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pricing", type=Path, required=True)
+    pricing = parser.add_mutually_exclusive_group(required=True)
+    pricing.add_argument("--pricing", type=Path, help="Use one explicit pricing file.")
+    pricing.add_argument(
+        "--pricing-dir",
+        type=Path,
+        help="Select peak/off-peak pricing by Beijing time and China holidays.",
+    )
     parser.add_argument(
         "--data-dir",
         type=Path,
@@ -560,7 +568,8 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         event = payload.get("hook_event_name")
         ledger = Ledger(args.data_dir)
-        pricing = PriceTable.load(args.pricing)
+        pricing_file = args.pricing or pricing_path_for(args.pricing_dir)
+        pricing = PriceTable.load(pricing_file)
         if event == "UserPromptSubmit":
             _handle_prompt_submit(payload, ledger)
         elif event == "SubagentStart":

@@ -2,6 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
@@ -11,6 +12,7 @@ from codex_request_meter.install import (  # noqa: E402
     ensure_pricing,
     hook_command as package_hook_command,
 )
+from codex_request_meter.pricing_period import is_peak_time, pricing_path_for  # noqa: E402
 from scripts.codex_request_meter import (
     Ledger,
     PriceTable,
@@ -117,6 +119,25 @@ class MeterTests(unittest.TestCase):
         self.assertEqual(
             self.pricing.rates_for("provider/test-family-v2"),
             self.pricing.models["test-family*"],
+        )
+
+    def test_deepseek_peak_windows_and_china_holidays(self):
+        beijing = timezone(timedelta(hours=8))
+
+        def at(month, day, hour, minute=0):
+            return datetime(2026, month, day, hour, minute, tzinfo=beijing)
+
+        self.assertFalse(is_peak_time(at(11, 25, 8, 59)))
+        self.assertTrue(is_peak_time(at(11, 25, 9, 0)))
+        self.assertFalse(is_peak_time(at(11, 25, 12, 0)))
+        self.assertTrue(is_peak_time(at(11, 25, 14, 0)))
+        self.assertFalse(is_peak_time(at(11, 25, 18, 0)))
+        self.assertFalse(is_peak_time(at(11, 28, 10, 0)))  # Saturday
+        self.assertFalse(is_peak_time(at(2, 16, 10, 0)))  # Spring Festival Monday
+        self.assertTrue(is_peak_time(at(2, 24, 10, 0)))
+        self.assertEqual(
+            pricing_path_for(self.root, at(2, 16, 10, 0)).name,
+            "pricing.offpeak.json",
         )
 
     def test_package_bundles_pricing_and_generates_portable_hook(self):

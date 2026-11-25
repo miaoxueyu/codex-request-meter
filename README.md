@@ -106,7 +106,7 @@ MIT
 在 upstream 基础上做了两处改动：
 
 - **显示层**：`meter.py` 的 `_summary_message` 把原本的 `cache <token数>` 改成 `cache <命中率>%`（单轮），并在 `Session ...` 后面追加 `[cache <会话命中率>%]`，让你同时看到单轮与整段会话的缓存命中率。
-- **价格/部署**：内置 DeepSeek 价格（元/百万 token），`config/run-meter.sh` 按北京时间自动在**高峰/空闲**两档间切换（高峰 = 周一至周五 9:00-12:00、14:00-18:00，空闲价为高峰一半）。
+- **价格/部署**：内置 DeepSeek 价格（元/百万 token），`config/run-meter.sh` 按北京时间自动在**高峰/空闲**两档间切换（高峰 = 周一至周五 9:00-12:00、14:00-18:00，排除中国法定节假日；周末始终为空闲价）。
 
 ### 新机器一键安装
 
@@ -139,6 +139,7 @@ Session: 98.8k tok  ¥0.10  cache 90.5%
 - 价格：`~/.config/codex-request-meter/pricing.peak.json`、`pricing.offpeak.json`（单位：元/百万 token；`cache_write_input_per_million` 沿用未命中价，因为 DeepSeek 无单独缓存写入价）。
 - 模型 key：flash 档位用通配 `deepseek-flash*`、`deepseek-v4-flash*`、`deepseek-v4.1-flash*`（覆盖 `deepseek-v4-flash-vision-exp`、`deepseek-v4.1-flash-expires-on-0910` 等新旧命名）；pro 档位 `deepseek-v4-pro` + 通配 `deepseek-v4-pro*`。
 - 模型标识兼容供应商前缀：`deepseek/deepseek-flash` 会先按全名匹配，未命中时自动回退为 `deepseek-flash` 再查价格。
+- 法定节假日来自 Python 包 `chinesecalendar`（按国务院办公厅每年公布的放假与调休安排维护）；周末即使调休上班也仍按空闲价处理，与 DeepSeek 规则一致。
 - 计价基准（元/百万 token，2026-09 官方价）：flash 空闲 输入 1 / 缓存命中 0.02 / 输出 4，高峰 输入 2 / 缓存命中 0.04 / 输出 8；pro 空闲 输入 4.5 / 缓存命中 0.15 / 输出 13.5，高峰 输入 9 / 缓存命中 0.3 / 输出 27。
 - Hook：`~/.codex/hooks.json`；明细：`~/.codex/request-meter/events.jsonl`。
 - 若改了 `~/config` 里的价格，**无需重装或重启**，下一轮即读取新值。

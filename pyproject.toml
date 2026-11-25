@@ -11,6 +11,7 @@ requires-python = ">=3.10"
 license = "MIT"
 authors = [{name = "BobDLA"}]
 keywords = ["codex", "tokens", "metering", "cost"]
+dependencies = ["chinesecalendar>=1.12.1,<2"]
 classifiers = [
   "Environment :: Console",
   "Programming Language :: Python :: 3",
